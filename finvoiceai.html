@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinVoice AI</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+.hidden-section { display: none; }
+</style>
+</head>
+
+<body class="bg-gray-100 text-gray-800 flex min-h-screen">
+
+<!-- Sidebar -->
+<div class="w-64 bg-white shadow-lg p-5 space-y-4">
+    <h1 class="text-2xl font-bold text-indigo-600">FinVoice AI</h1>
+
+    <button onclick="showSection('dashboard')" class="block w-full text-left p-2 rounded hover:bg-indigo-100">📊 Dashboard</button>
+    <button onclick="showSection('assistant')" class="block w-full text-left p-2 rounded hover:bg-indigo-100">🎤 Voice Assistant</button>
+    <button onclick="showSection('settings')" class="block w-full text-left p-2 rounded hover:bg-indigo-100">⚙️ Settings</button>
+</div>
+
+<!-- Main -->
+<div class="flex-1 p-6">
+
+<!-- Dashboard -->
+<section id="dashboard">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Welcome back 👋</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+
+        <div class="bg-white shadow-md p-5 rounded-xl">
+            <p class="text-gray-500">Total Balance</p>
+            <h3 class="text-xl font-bold mt-2 text-indigo-600">$5,240.50</h3>
+        </div>
+
+        <div class="bg-white shadow-md p-5 rounded-xl">
+            <p class="text-gray-500">Savings</p>
+            <h3 class="text-xl font-bold mt-2 text-green-600">$2,100.00</h3>
+        </div>
+
+        <div class="bg-white shadow-md p-5 rounded-xl">
+            <p class="text-gray-500">Credit Used</p>
+            <h3 class="text-xl font-bold mt-2 text-red-500">$1,200.00</h3>
+        </div>
+
+    </div>
+
+    <div class="bg-white shadow-md p-5 rounded-xl">
+        <h3 class="font-bold mb-4">Recent Transactions</h3>
+
+        <p>☕ Starbucks - $5.50</p>
+        <p>🛒 Amazon - $84.20</p>
+        <p>💰 Salary + $3400</p>
+    </div>
+</section>
+
+<!-- Voice Assistant -->
+<section id="assistant" class="hidden-section text-center">
+
+    <h2 class="text-2xl font-bold mb-6">Voice Assistant 🎤</h2>
+
+    <button onclick="toggleListening()" id="mic-btn"
+        class="bg-indigo-600 text-white w-24 h-24 rounded-full text-3xl hover:scale-105 transition">
+        🎤
+    </button>
+
+    <p id="status" class="mt-4 text-gray-600">Click to start listening</p>
+
+</section>
+
+<!-- Settings -->
+<section id="settings" class="hidden-section">
+    <h2 class="text-2xl font-bold mb-4">Settings ⚙️</h2>
+
+    <div class="bg-white shadow-md p-5 rounded-xl">
+        <p class="mb-2">Voice Sensitivity</p>
+        <input type="range" class="w-full accent-indigo-500">
+
+        <p class="mt-4">Biometric Authentication</p>
+        <button class="bg-indigo-600 text-white px-4 py-1 rounded mt-2">Enabled</button>
+    </div>
+</section>
+
+</div>
+
+<script>
+lucide.createIcons();
+
+// Navigation
+function showSection(section) {
+    document.querySelectorAll("section").forEach(s => s.classList.add("hidden-section"));
+    document.getElementById(section).classList.remove("hidden-section");
+}
+
+// Voice Simulation
+let listening = false;
+
+function toggleListening() {
+    const status = document.getElementById("status");
+    const btn = document.getElementById("mic-btn");
+
+    listening = !listening;
+
+    if (listening) {
+        status.innerText = "Listening...";
+        btn.classList.add("bg-red-500");
+
+        setTimeout(() => {
+            status.innerText = "You said: Check balance";
+            speak("Your current balance is 5240 dollars");
+
+            listening = false;
+            btn.classList.remove("bg-red-500");
+            btn.classList.add("bg-indigo-600");
+        }, 2000);
+
+    } else {
+        status.innerText = "Stopped";
+        btn.classList.remove("bg-red-500");
+        btn.classList.add("bg-indigo-600");
+    }
+}
+
+// Speak
+function speak(text) {
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang = "en-US";
+    window.speechSynthesis.speak(speech);
+}
+</script>
+
+</body>
+</html>
